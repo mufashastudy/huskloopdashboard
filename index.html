@@ -74,6 +74,7 @@ label.f input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--husk);h
 label{font-size:13px;font-weight:600;color:var(--ink)}
 input[type=number],input[type=month],input[type=text],select{font:inherit;font-size:16px;padding:8px 11px;border:1px solid var(--line);border-radius:12px;background:var(--cardsolid);color:var(--ink);width:100%;min-height:44px;margin-top:3px;transition:border-color .2s,box-shadow .2s}
 input[type=number]:focus,input[type=month]:focus,input[type=text]:focus,select:focus{outline:none;border-color:var(--husk);box-shadow:0 0 0 3px rgba(139,98,61,.18)}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media(max-width:420px){.row3{grid-template-columns:1fr}}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .seg{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
 .seg button{font:inherit;font-size:13px;font-weight:600;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--cardsolid);color:var(--ink);min-height:40px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
@@ -280,6 +281,10 @@ footer{max-width:1280px;margin:0 auto;padding:0 max(3vw,14px) 30px;font-size:12p
       <p class="note" id="wst" style="margin:6px 0 8px"></p>
       <div class="row2"><label>Forecast rain, next 24 h (mm)<input type="number" id="rain" value="12" min="0" step="1"></label>
       <label>Rain, next 3 days (mm)<input type="number" id="rain72" value="" min="0" step="1" placeholder="optional"></label></div>
+      <div class="sec">Field Conditions</div>
+      <div class="row3"><label>Max temp, 24 h (°C)<input type="number" id="wt" value="" min="0" max="50" step="1" placeholder="optional"></label>
+      <label>Avg humidity (%)<input type="number" id="wh" value="" min="0" max="100" step="1" placeholder="optional"></label>
+      <label>Max wind (km/h)<input type="number" id="ww" value="" min="0" max="150" step="1" placeholder="optional"></label></div>
       <label style="display:block;margin-top:10px">Field Water Condition<select id="flood"><option value="sat">Saturated, no standing water</option><option value="fl">Standing water</option><option value="dry">Dry or drained</option></select></label>
       <div class="tip" id="raintip"></div>
       <p class="note">The advice uses the next 24 h; the 3-day total is for planning only. Read the forecast for your village on <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca" style="color:var(--husk)">bmkg.go.id</a> and type it here, or fetch a model forecast when this page runs outside the sandbox. Daily rain classes follow BMKG: light 5–20 mm, moderate 20–50 mm, heavy 50–100 mm, very heavy above 100 mm.</p></div>
@@ -486,11 +491,16 @@ function rainTip(){const r=+$('rain').value||0,f=$('flood').value;let t;
  else if(r>=20)t='<b>Apply only if the granules can be worked into the mud today</b> and the bunds and outlets are closed. Otherwise wait a day.';
  else t='<b>Good window.</b> Light or no rain is forecast.';
  t+=f==='fl'?' Standing water: granules broadcast onto flood water lose more NH₃. Lower the water to saturated soil, apply and work in, then re-flood.':f==='dry'?' Dry soil: urea left on the surface loses NH₃. Irrigate or work it in soon after applying.':' Saturated soil without standing water is the easiest condition to work the granules in.';
+ const T=$('wt').value===''?null:+$('wt').value,H=$('wh').value===''?null:+$('wh').value,Wd=$('ww').value===''?null:+$('ww').value,x=[];
+ if(Wd!==null&&Wd>=20)x.push('<b>Windy.</b> Strong wind raises NH₃ and dust loss from granules left on the surface. Apply in calm hours and work the granules in straight away.');
+ if(T!==null&&T>=32)x.push('<b>Hot.</b> Warm conditions speed urea hydrolysis and NH₃ loss. Apply in the cool early morning or late afternoon.');
+ if(H!==null&&H>=85)x.push('<b>Humid air.</b> Clay-coated granules can take up moisture and cake. Keep bags sealed and open only what you will apply that day.');
+ if(x.length)t+='<br><br>'+x.join('<br>')+'<br><span style="color:var(--mut);font-size:12px">Weather advice is indicative; the 20 km/h, 32 °C and 85% cut-offs are team planning values, not trial results.</span>';
  $('raintip').innerHTML=t}
 function toCSV(){const rows=rowsNow();const h='month,site,hectares,usual_urea_kg_per_ha,urea_applied_kg,urea_saved_kg,saving_pct,co2e_avoided_kg,source';
  return [h,...rows.map(r=>{const c=calc(r);return[r.mo,'"'+String(r.site).replace(/"/g,'""')+'"',r.ha,r.dose,r.app,Math.round(c.sv),(c.pct*100).toFixed(1),Math.round(c.sv*FU),r.demo?'demo':'log'].join(',')})].join('\n')}
 $('mseg').onclick=e=>{const b=e.target.closest('button');if(!b)return;ms.mode=b.dataset.m;ms.chosen=true;renderMon()};
-$('tgt').addEventListener('input',renderMon);$('rain').addEventListener('input',rainTip);$('flood').addEventListener('change',rainTip);
+$('tgt').addEventListener('input',renderMon);$('rain').addEventListener('input',rainTip);['wt','wh','ww'].forEach(i=>$(i).addEventListener('input',rainTip));$('flood').addEventListener('change',rainTip);
 {const d=new Date();$('fmo').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 $('mform').addEventListener('submit',async e=>{e.preventDefault();
  const r={mo:$('fmo').value,site:$('fsite').value.trim().slice(0,40),ha:+$('fha').value,dose:+$('fdose').value,app:+$('fapp').value};
@@ -525,7 +535,7 @@ async function wxFetch(){const st=$('wst');st.textContent='Fetching…';
  try{
   if($('wloc').value==='me'){await new Promise((ok,no)=>{if(!navigator.geolocation)return no(new Error('geo'));navigator.geolocation.getCurrentPosition(p=>{WX.lat=p.coords.latitude;WX.lon=p.coords.longitude;WX.name='your location';ok()},no,{timeout:8000})})}
   else{WX.lat=-6.3264;WX.lon=108.3200;WX.name='Indramayu'}
-  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat.toFixed(4)}&longitude=${WX.lon.toFixed(4)}&hourly=precipitation&forecast_days=4&timezone=Asia%2FJakarta`);
+  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat.toFixed(4)}&longitude=${WX.lon.toFixed(4)}&hourly=precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m&forecast_days=4&timezone=Asia%2FJakarta`);
   if(!r.ok)throw new Error('http '+r.status);
   const j=await r.json();const T=j.hourly&&j.hourly.time,P=j.hourly&&j.hourly.precipitation;if(!T||!P)throw new Error('shape');
   const now=new Date().toLocaleString('sv-SE',{timeZone:'Asia/Jakarta'}).replace(' ','T').slice(0,13)+':00';
@@ -533,6 +543,9 @@ async function wxFetch(){const st=$('wst');st.textContent='Fetching…';
   const sum=(a,b)=>P.slice(a,b).reduce((x,y)=>x+(+y||0),0);
   const r24=sum(i0,i0+24),r72=sum(i0,i0+72);
   const d=[0,1,2].map(k=>sum(i0+k*24,i0+k*24+24));
+  const sl=k=>(j.hourly[k]||[]).slice(i0,i0+24).map(Number).filter(Number.isFinite);
+  const tt=sl('temperature_2m'),hh=sl('relative_humidity_2m'),ww=sl('wind_speed_10m');
+  if(tt.length)$('wt').value=Math.round(Math.max(...tt));if(hh.length)$('wh').value=Math.round(hh.reduce((a,b)=>a+b,0)/hh.length);if(ww.length)$('ww').value=Math.round(Math.max(...ww));
   $('rain').value=Math.round(r24);$('rain72').value=Math.round(r72);
   $('wdays').innerHTML=d.map((x,k)=>`<span class="chip">${['Next 24 h','24–48 h','48–72 h'][k]}: <b>${fmt(x,0)} mm</b></span>`).join('');
   rainTip();
