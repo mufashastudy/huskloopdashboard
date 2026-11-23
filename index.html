@@ -18,7 +18,11 @@
 --leaf:light-dark(#287A46,#6fc276);--sage:light-dark(#8BA68A,#7f9a7e);
 --warn:light-dark(#b26a00,#f0b04a);--bad:light-dark(#a12a22,#ff8a80);
 --soft:light-dark(#F5F2EA,#25221e);--shadow:light-dark(0 8px 28px rgba(104,72,47,.08),0 8px 28px rgba(0,0,0,.35));
---r:18px}
+--r:18px;--acc:var(--husk)}
+body[data-v=breakeven]{--acc:light-dark(#B0822A,#e0b45a)}
+body[data-v=regency]{--acc:light-dark(#287A46,#6fc276)}
+body[data-v=monitor]{--acc:light-dark(#3C7A78,#6fc0bd)}
+body[data-v=method]{--acc:light-dark(#7A6A58,#b9a892)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html{scroll-behavior:smooth}
@@ -35,7 +39,7 @@ nav::-webkit-scrollbar{display:none}
 nav a{color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13.5px;white-space:nowrap;min-height:38px;display:flex;align-items:center;gap:7px;transition:background .2s,color .2s}
 nav a svg{width:16px;height:16px;flex:none;opacity:.8}
 nav a:hover{background:rgba(139,98,61,.10)}
-nav a.on{background:var(--husk);color:#fff;box-shadow:0 3px 10px rgba(139,98,61,.35)}nav a.on svg{opacity:1}
+nav a.on{background:var(--acc);color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.18)}nav a.on svg{opacity:1}
 nav a:focus-visible{outline:2px solid var(--husk);outline-offset:2px}
 .right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .pill{display:flex;align-items:center;gap:7px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;white-space:nowrap}
@@ -51,11 +55,16 @@ h1{font-size:clamp(24px,2.8vw,32px);line-height:1.12;margin:0 0 4px;font-weight:
 .about{margin-top:8px}.about summary{font-size:12.5px;font-weight:600;color:var(--husk);cursor:pointer}
 .about p{margin:6px 0 0;font-size:13px;color:var(--mut);max-width:80ch}
 .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--deep);background:rgba(139,98,61,.10);border:1px solid rgba(139,98,61,.2);border-radius:999px;padding:3px 11px;margin-bottom:8px}
-.headline{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--husk);border-radius:12px;padding:9px 14px;margin:0 0 14px;font-weight:700;font-size:14.5px;box-shadow:var(--shadow)}
+.headline{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:12px;padding:9px 14px;margin:0 0 14px;font-weight:700;font-size:14.5px;box-shadow:var(--shadow)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
 .kpi{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.kpi::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--husk)}
+.kpi::before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--acc)}
 .kpi.g::before{background:var(--leaf)}
+.kpi .top{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.kpi .row{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.spark{width:84px;height:34px;flex:none;overflow:visible}
+.bdg{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap;background:rgba(40,122,70,.12);color:var(--leaf)}
+.bdg.w{background:rgba(178,106,0,.14);color:var(--warn)}.bdg.b{background:rgba(161,42,34,.12);color:var(--bad)}.bdg:empty{display:none}
 .kpi .l{font-size:12px;color:var(--mut);font-weight:600}
 .kpi .v{font-size:clamp(21px,2.2vw,27px);font-weight:800;line-height:1.2;white-space:nowrap;letter-spacing:-.3px}
 .kpi.g .v{color:var(--leaf)}
@@ -66,7 +75,7 @@ h1{font-size:clamp(24px,2.8vw,32px);line-height:1.12;margin:0 0 4px;font-weight:
 .card{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);transition:box-shadow .25s,transform .25s}
 @media(hover:hover){.card:hover{box-shadow:0 12px 34px rgba(104,72,47,.12)}}
 .card h2{font-size:15px;margin:0 0 12px;font-weight:700;display:flex;align-items:center;gap:8px}
-.card h2::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--husk);flex:none}
+.card h2::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--acc);flex:none}
 .sec{font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px}
 label.f{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin:10px 0;font-size:13.5px;font-weight:600}
 label.f output{font-weight:800;color:var(--husk);white-space:nowrap;background:rgba(139,98,61,.09);border-radius:8px;padding:1px 9px}
@@ -253,11 +262,11 @@ footer{max-width:1280px;margin:0 auto;padding:0 max(3vw,14px) 30px;font-size:12p
   <div class="src"><span class="dot" id="mdot"></span><span id="msrc">Connecting to the shared log…</span>
     <div class="seg" id="mseg"><button data-m="live">Logged data</button><button data-m="demo" class="on">Demo</button></div></div>
   <div class="kpis">
-    <div class="kpi g"><div class="l" id="m1l">Urea saved, latest month</div><div class="v" id="m1"></div><div class="s" id="m1s"></div></div>
-    <div class="kpi g"><div class="l" id="m2l">Urea saved, year to date</div><div class="v" id="m2"></div><div class="s" id="m2s"></div></div>
-    <div class="kpi"><div class="l">Average Dose Saving</div><div class="v" id="m3"></div><div class="s" id="m3s"></div></div>
-    <div class="kpi g"><div class="l">Climate Gain, YTD</div><div class="v" id="m4"></div><div class="s">t CO₂e, N₂O + urea CO₂</div></div>
-    <div class="kpi g"><div class="l">Subsidy Freed, YTD</div><div class="v" id="m5"></div><div class="s">ha of subsidised quota at each site's usual dose</div></div>
+    <div class="kpi g"><div class="top"><div class="l" id="m1l">Urea saved, latest month</div><span class="bdg" id="bd1"></span></div><div class="row"><div class="v" id="m1"></div><svg class="spark" id="sp1"></svg></div><div class="s" id="m1s"></div></div>
+    <div class="kpi g"><div class="top"><div class="l" id="m2l">Urea saved, year to date</div><span class="bdg" id="bd2"></span></div><div class="row"><div class="v" id="m2"></div><svg class="spark" id="sp2"></svg></div><div class="s" id="m2s"></div></div>
+    <div class="kpi"><div class="top"><div class="l">Average Dose Saving</div><span class="bdg" id="bd3"></span></div><div class="row"><div class="v" id="m3"></div><svg class="spark" id="sp3"></svg></div><div class="s" id="m3s"></div></div>
+    <div class="kpi g"><div class="top"><div class="l">Climate Gain, YTD</div></div><div class="row"><div class="v" id="m4"></div><svg class="spark" id="sp4"></svg></div><div class="s">t CO₂e, N₂O + urea CO₂</div></div>
+    <div class="kpi g"><div class="top"><div class="l">Subsidy Freed, YTD</div></div><div class="row"><div class="v" id="m5"></div><svg class="spark" id="sp5"></svg></div><div class="s">ha of subsidised quota at each site's usual dose</div></div>
   </div>
   <div class="g2">
     <div class="card"><h2>Monthly Urea Savings (t)</h2><div class="fig" id="momfig"></div>
@@ -434,6 +443,11 @@ const chg=(x,txt)=>x==null?txt||'':`<span class="chg ${x>=0?'up':'dn'}">${x>=0?'
 const YC=['var(--husk)','var(--sec)','var(--sage)','var(--line2)'];
 const yc=(i,n)=>YC[Math.min(n-1-i,YC.length-1)];
 const nice=(mx,n=4)=>{const r=mx/n,p=10**Math.floor(Math.log10(r)),st=[1,2,2.5,5,10].map(k=>k*p).find(k=>k>=r);return{st,top:Math.ceil(mx/st)*st}};
+function spark(id,v,col){const e=$(id);if(!e)return;if(!v||v.length<2){e.innerHTML='';return}
+ const W=84,H=34,mn=Math.min(...v),mx=Math.max(...v),r=(mx-mn)||1,x=i=>2+i/(v.length-1)*(W-8),y=a=>H-4-(a-mn)/r*(H-10);
+ const d=v.map((a,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(a).toFixed(1)).join(''),gid='sg'+id;
+ e.setAttribute('viewBox',`0 0 ${W} ${H}`);e.innerHTML=`<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".30"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${d}L${x(v.length-1).toFixed(1)} ${H}L${x(0)} ${H}Z" fill="url(#${gid})"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(v.length-1).toFixed(1)}" cy="${y(v[v.length-1]).toFixed(1)}" r="3.2" fill="${col}" stroke="var(--cardsolid)" stroke-width="1.5"/>`}
+function bdg(id,t,c){const e=$(id);e.textContent=t;e.className='bdg'+(c?' '+c:'')}
 function renderMon(){
  const live=ms.live.length+ms.session.length;
  $('mdot').className='dot'+(ms.mode==='live'&&ms.db?' live':'');$('mdot').hidden=ms.mode==='demo';
@@ -455,6 +469,12 @@ function renderMon(){
  $('m2s').innerHTML=py.sv>0?chg(pc(cur.sv,py.sv),`vs same months of ${Y-1}`):'no earlier year to compare';
  $('m3').textContent=fmt(cur.us?cur.sv/cur.us*100:0,1)+'%';const low=rows.filter(r=>calc(r).pct<0.14).length;$('m3s').innerHTML='of usual urea, '+Y+' to date; the essay plans 20%'+(low?`<br><b style="color:#a12a22">⚠ ${low} entr${low==1?'y':'ies'} below the 14% break-even (5% shell)</b>`:'');
  $('m4').textContent=fmt(cur.sv*FU/1000,1);$('m5').textContent=fmt(cur.fr);
+ {const ks=keys.filter(k=>+k.slice(0,4)===Y&&k<=last),cs=[],cf=[];let a=0,b=0;ks.forEach(k=>{a+=by[k].sv;b+=by[k].fr;cs.push(a);cf.push(b)});
+  const mm=keys.slice(-12);spark('sp1',mm.map(k=>by[k].sv),'var(--leaf)');spark('sp2',cs,'var(--leaf)');
+  spark('sp3',keys.slice(-12).map(k=>by[k].us?by[k].sv/by[k].us*100:0),'var(--husk)');spark('sp4',cs,'var(--leaf)');spark('sp5',cf,'var(--leaf)');
+  prev?bdg('bd1',(by[last].sv>=by[prev].sv?'▲ ':'▼ ')+fmt(Math.abs(pc(by[last].sv,by[prev].sv))*100)+'%',by[last].sv>=by[prev].sv?'':'w'):bdg('bd1','');
+  py.sv>0?bdg('bd2',(cur.sv>=py.sv?'▲ ':'▼ ')+fmt(Math.abs(pc(cur.sv,py.sv))*100)+'%',cur.sv>=py.sv?'':'w'):bdg('bd2','');
+  const pct=cur.us?cur.sv/cur.us*100:0;bdg('bd3',pct>=20?'On plan':pct>=14?'Above 14%':'Below 14%',pct>=20?'':pct>=14?'w':'b')}
  $('mo-title').textContent=py.sv>0?`Urea saved in ${Y} so far is ${fmt(Math.abs(pc(cur.sv,py.sv))*100)}% ${cur.sv>=py.sv?'above':'below'} the same months of ${Y-1}`:`${fmt(cur.sv/1000,1)} t of urea saved in ${Y} so far`;
  const yrs=[...new Set(keys.map(k=>+k.slice(0,4)))];
  $('ytab').innerHTML=yrs.map((y,i)=>{const t=keys.filter(k=>+k.slice(0,4)===y).reduce((a,k)=>({ha:a.ha+by[k].ha,us:a.us+by[k].us,sv:a.sv+by[k].sv}),{ha:0,us:0,sv:0});const p=i?yrs[i-1]:null;
@@ -469,7 +489,7 @@ function drawMoM(by,mos,yrs){const s=$('momfig');const W=s.clientWidth,H=s.clien
  let g='';for(let y=0;y<=top+1e-9;y+=st){g+=`<line x1="${L}" x2="${W-R}" y1="${ys(y)}" y2="${ys(y)}" stroke="var(--line)"/><text x="${L-6}" y="${ys(y)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${fmt(y,st<1?1:0)}</text>`}
  const every=W<520?(n>12?6:3):(n>18?3:1);
  mos.forEach((k,i)=>{const v=by[k]?by[k].sv/1000:0,x=L+i*bw,col=yc(yrs.indexOf(+k.slice(0,4)),yrs.length);
-  if(v>0)g+=`<rect x="${x+bw*0.14}" y="${ys(v)}" width="${bw*0.72}" height="${ys(0)-ys(v)}" rx="2" fill="${col}"><title>${mlab(k)}: ${fmt(v,2)} t</title></rect>`;
+  if(v>0)g+=`<rect x="${x+bw*0.14}" y="${ys(v)}" width="${bw*0.72}" height="${ys(0)-ys(v)}" rx="4" fill="${col}" fill-opacity="${i===n-1?1:.86}"${i===n-1?' stroke="var(--deep)" stroke-width="1.5"':''}><title>${mlab(k)}: ${fmt(v,2)} t</title></rect>`;
   if(i%every===0||i===n-1)g+=`<text x="${x+bw/2}" y="${H-B+16}" text-anchor="middle" font-size="11" fill="var(--mut)">${MN[+k.slice(5)-1].slice(0,W<520?1:3)}${k.endsWith('-01')||i===0?' '+k.slice(2,4):''}</text>`});
  const lk=mos[n-1],lv=by[lk]?by[lk].sv/1000:0;if(lv>0)g+=`<text x="${Math.min(L+(n-0.5)*bw,W-R-2)}" y="${ys(lv)-5}" text-anchor="end" font-size="12" font-weight="700" fill="var(--ink)">${fmt(lv,1)} t</text>`;
  s.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
@@ -480,8 +500,10 @@ function drawYoY(by,yrs,last){const s=$('yoyfig');const W=s.clientWidth,H=s.clie
  const mx=Math.max(...lines.map(l=>l.end),1),{st,top}=nice(mx),ys=v=>H-B-v/top*(H-T-B);
  let g='';for(let v=0;v<=top+1e-9;v+=st){g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${L-6}" y="${ys(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${fmt(v)}</text>`}
  for(let m=0;m<12;m+=W<520?3:1)g+=`<text x="${xs(m)}" y="${H-B+16}" text-anchor="middle" font-size="11" fill="var(--mut)">${MN[m].slice(0,W<520?3:1)}</text>`;
+g+=`<defs><linearGradient id="yoyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--husk)" stop-opacity=".28"/><stop offset="1" stop-color="var(--husk)" stop-opacity="0"/></linearGradient></defs>`;
+ {const l=lines[lines.length-1];if(l&&l.pts.length>1){const d=l.pts.map((p,j)=>(j?'L':'M')+xs(p[0]).toFixed(1)+' '+ys(p[1]).toFixed(1)).join('');g+=`<path d="${d}L${xs(l.pts[l.pts.length-1][0]).toFixed(1)} ${ys(0)}L${xs(0)} ${ys(0)}Z" fill="url(#yoyg)"/>`}}
  const ends=[];lines.forEach((l,i)=>{const col=yc(i,yrs.length);const d=l.pts.map((p,j)=>(j?'L':'M')+xs(p[0]).toFixed(1)+' '+ys(p[1]).toFixed(1)).join('');
-  g+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${i===lines.length-1?3:2}"/>`;const p=l.pts[l.pts.length-1];if(p){g+=`<circle cx="${xs(p[0])}" cy="${ys(p[1])}" r="4" fill="${col}"/>`;ends.push({x:xs(p[0]),y:ys(p[1]),t:`${l.y}: ${fmt(l.end,1)}`,col})}});
+  g+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${i===lines.length-1?3:2}"/>`;const p=l.pts[l.pts.length-1];if(p){g+=`<circle cx="${xs(p[0])}" cy="${ys(p[1])}" r="${i===lines.length-1?9:6}" fill="${col}" opacity=".18"/><circle cx="${xs(p[0])}" cy="${ys(p[1])}" r="4.5" fill="${col}" stroke="var(--cardsolid)" stroke-width="2"/>`;ends.push({x:xs(p[0]),y:ys(p[1]),t:`${l.y}: ${fmt(l.end,1)}`,col})}});
  ends.sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<14)ends[i].y=ends[i-1].y+14;
  ends.forEach(e=>{const right=e.x>W-R-4;g+=`<text x="${right?e.x+7:e.x+7}" y="${e.y+4}" font-size="12" font-weight="700" fill="var(--ink)">${e.t}</text>`});
  s.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
@@ -559,7 +581,7 @@ document.querySelectorAll('#pseg button').forEach(b=>b.onclick=()=>{st.P=+b.data
 document.querySelectorAll('#kseg button').forEach(b=>b.onclick=()=>{st.k=+b.dataset.k;document.querySelectorAll('#kseg button').forEach(x=>x.classList.toggle('on',x===b));render()});
 document.querySelectorAll('#rseg button').forEach(b=>b.onclick=()=>{$('u0').value=b.dataset.u;$('hm').value=b.dataset.h;$('ad').value=b.dataset.u>1e6?10:100;$('rg-title').textContent=b.dataset.u>1e6?'National roll-out on the subsidised urea quota':'Indramayu-wide adoption';document.querySelectorAll('#rseg button').forEach(x=>x.classList.toggle('on',x===b));render()});
 document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
-function route(){const h=(location.hash||'#advisor').slice(1);const ok=['advisor','breakeven','regency','monitor','method'].includes(h)?h:'advisor';
+function route(){document.body.dataset.v=((location.hash||'#advisor').slice(1));const h=(location.hash||'#advisor').slice(1);const ok=['advisor','breakeven','regency','monitor','method'].includes(h)?h:'advisor';
  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+ok));document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===ok));render()}
 window.addEventListener('hashchange',route);
 const ro=new ResizeObserver(()=>render());ro.observe(document.querySelector('main'));
