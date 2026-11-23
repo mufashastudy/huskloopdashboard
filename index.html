@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HUSKLOOP·DOSE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* HUSKLOOP·DOSE v5: presentation redesign. Calculations, defaults and data are unchanged.
+   Palette: husk brown, deep brown, sage and paddy green on warm cream; restrained glass cards. */
+:root{color-scheme:light;
+--bg:light-dark(#F5F2EA,#141311);--ivory:light-dark(#FBFAF6,#1a1816);
+--card:light-dark(rgba(255,255,255,.78),rgba(33,30,27,.78));--cardsolid:light-dark(#ffffff,#211e1b);
+--ink:light-dark(#292820,#efe9df);--mut:light-dark(#858176,#a89f92);
+--line:light-dark(#E8E2D7,#34302a);--line2:light-dark(#d8d0c0,#4a443b);
+--husk:light-dark(#8B623D,#d0a273);--deep:light-dark(#68482F,#e6c9a6);--sec:light-dark(#A77B50,#b88d62);
+--leaf:light-dark(#287A46,#6fc276);--sage:light-dark(#8BA68A,#7f9a7e);
+--warn:light-dark(#b26a00,#f0b04a);--bad:light-dark(#a12a22,#ff8a80);
+--soft:light-dark(#F5F2EA,#25221e);--shadow:light-dark(0 8px 28px rgba(104,72,47,.08),0 8px 28px rgba(0,0,0,.35));
+--r:18px}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:14.5px/1.5 "Plus Jakarta Sans",system-ui,sans-serif;overflow-x:clip;min-height:100vh;
+ background:radial-gradient(900px 480px at 8% -8%,rgba(139,98,61,.13),transparent 60%),radial-gradient(800px 460px at 100% 0%,rgba(139,166,138,.20),transparent 62%),var(--bg);background-attachment:fixed}
+header{position:sticky;top:0;z-index:20;background:var(--card);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+ border-bottom:1px solid var(--line);padding:10px max(3vw,14px);display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:38px;height:38px;flex:none}
+.brand b{font-size:18.5px;font-weight:800;letter-spacing:.2px;line-height:1.1;display:block}.brand b span{color:var(--husk)}
+.brand small{display:block;font-size:11.5px;color:var(--mut);line-height:1.2}
+nav{display:flex;gap:4px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:4px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13.5px;white-space:nowrap;min-height:38px;display:flex;align-items:center;gap:7px;transition:background .2s,color .2s}
+nav a svg{width:16px;height:16px;flex:none;opacity:.8}
+nav a:hover{background:rgba(139,98,61,.10)}
+nav a.on{background:var(--husk);color:#fff;box-shadow:0 3px 10px rgba(139,98,61,.35)}nav a.on svg{opacity:1}
+nav a:focus-visible{outline:2px solid var(--husk);outline-offset:2px}
+.right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:flex;align-items:center;gap:7px;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.pill b{color:var(--husk);font-variant-numeric:tabular-nums}
+.pill .st{width:8px;height:8px;border-radius:50%;background:var(--warn)}
+main{max-width:1280px;margin:0 auto;padding:22px max(3vw,14px) 36px}
+.view{display:none}.view.on{display:block;animation:in .35s ease both}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.view.on{animation:none}}
+.pagehead{margin-bottom:16px}
+h1{font-size:clamp(24px,2.8vw,32px);line-height:1.12;margin:0 0 4px;font-weight:800;letter-spacing:-.2px}
+.sub{color:var(--mut);margin:0;font-size:14.5px}
+.about{margin-top:8px}.about summary{font-size:12.5px;font-weight:600;color:var(--husk);cursor:pointer}
+.about p{margin:6px 0 0;font-size:13px;color:var(--mut);max-width:80ch}
+.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--deep);background:rgba(139,98,61,.10);border:1px solid rgba(139,98,61,.2);border-radius:999px;padding:3px 11px;margin-bottom:8px}
+.headline{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--husk);border-radius:12px;padding:9px 14px;margin:0 0 14px;font-weight:700;font-size:14.5px;box-shadow:var(--shadow)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--husk)}
+.kpi.g::before{background:var(--leaf)}
+.kpi .l{font-size:12px;color:var(--mut);font-weight:600}
+.kpi .v{font-size:clamp(21px,2.2vw,27px);font-weight:800;line-height:1.2;white-space:nowrap;letter-spacing:-.3px}
+.kpi.g .v{color:var(--leaf)}
+.kpi .s{font-size:12px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:14px;align-items:start}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:14px}
+.gm{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:14px;align-items:start}
+.card{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);transition:box-shadow .25s,transform .25s}
+@media(hover:hover){.card:hover{box-shadow:0 12px 34px rgba(104,72,47,.12)}}
+.card h2{font-size:15px;margin:0 0 12px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card h2::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--husk);flex:none}
+.sec{font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px}
+label.f{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin:10px 0;font-size:13.5px;font-weight:600}
+label.f output{font-weight:800;color:var(--husk);white-space:nowrap;background:rgba(139,98,61,.09);border-radius:8px;padding:1px 9px}
+label.f input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--husk);height:26px}
+label{font-size:13px;font-weight:600;color:var(--ink)}
+input[type=number],input[type=month],input[type=text],select{font:inherit;font-size:16px;padding:8px 11px;border:1px solid var(--line);border-radius:12px;background:var(--cardsolid);color:var(--ink);width:100%;min-height:44px;margin-top:3px;transition:border-color .2s,box-shadow .2s}
+input[type=number]:focus,input[type=month]:focus,input[type=text]:focus,select:focus{outline:none;border-color:var(--husk);box-shadow:0 0 0 3px rgba(139,98,61,.18)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+.seg button{font:inherit;font-size:13px;font-weight:600;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--cardsolid);color:var(--ink);min-height:40px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.seg button:hover{border-color:var(--husk)}
+.seg button.on{background:var(--husk);color:#fff;border-color:var(--husk)}
+.verdict{border-radius:var(--r);padding:18px 20px;margin-bottom:12px;color:#fff;box-shadow:var(--shadow)}
+.verdict .big{font-size:clamp(26px,3.2vw,38px);font-weight:800;line-height:1.1;letter-spacing:-.4px}
+.verdict.good{background:linear-gradient(135deg,#2f8a4f,#1f6338)}
+.verdict.edge{background:linear-gradient(135deg,#b5813f,#8B623D)}
+.verdict.bad{background:linear-gradient(135deg,#b23a31,#8a2620)}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl td,.tbl th{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover td{background:rgba(139,98,61,.04)}
+.tbl td.n,.tbl th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.fig{position:relative;min-height:300px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.note{font-size:12px;color:var(--mut);margin:8px 0 0}
+.tip{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 13px;font-size:13px;margin-top:10px}
+.tip b{color:var(--husk)}
+.bar{height:14px;background:var(--soft);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:5px 0 12px}
+.bar i{display:block;height:100%;background:var(--husk);border-radius:999px}
+.bar.g i{background:var(--leaf)}
+details{margin-top:12px}summary{cursor:pointer;font-weight:600;font-size:13.5px;min-height:32px}
+.scroll{overflow-x:auto}
+.src{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:13px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--warn);flex:none}.dot.live{background:var(--leaf)}
+@media(prefers-reduced-motion:no-preference){.dot.live{animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.35}}}
+.src .seg{margin:0 0 0 auto}
+.chg{font-weight:700}.chg.up{color:var(--leaf)}.chg.dn{color:var(--bad)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.btn{font:inherit;font-size:13.5px;font-weight:700;padding:10px 16px;border-radius:12px;border:1px solid var(--husk);background:var(--husk);color:#fff;min-height:44px;cursor:pointer;transition:background .2s,transform .15s}
+.btn:hover{background:var(--deep)}.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--husk)}.btn.ghost:hover{background:rgba(139,98,61,.08)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--husk);outline-offset:2px}
+.x{font:inherit;border:0;background:none;color:var(--bad);cursor:pointer;min-height:32px;padding:0 6px}
+.demo{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:var(--warn);color:#1d1b18;letter-spacing:.4px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--mut);margin-top:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-2px}
+.legend i.ln{height:3px;border-radius:2px;vertical-align:3px;width:16px}.legend i.dsh{height:0;border-top:2px dashed var(--deep);background:none;border-radius:0;vertical-align:3px;width:16px}
+.legend i.dt{border-radius:50%;background:var(--leaf)}
+.chip{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:12px}
+#wdays{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+footer{max-width:1280px;margin:0 auto;padding:0 max(3vw,14px) 30px;font-size:12px;color:var(--mut)}
+@media(max-width:860px){.grid,.gm{grid-template-columns:1fr}.right{margin-left:0;width:100%;justify-content:flex-start}nav{order:3;width:100%}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi .v{font-size:20px}}
+@media(max-width:420px){.row2{grid-template-columns:1fr}.card{padding:14px}}
+@media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="#8B623D" stroke-width="4"/><path d="M13 29c-1-9 3-16 15-17 1 10-4 17-13 17z" fill="#8B623D"/><path d="M13 29c4-5 8-9 13-13" stroke="#F5F2EA" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+    <div><b>HUSK<span>LOOP</span>·DOSE</b><small>Coated-urea dose and break-even advisor</small></div>
+  </div>
+  <nav id="nav" aria-label="Dashboard sections">
+    <a href="#advisor" data-v="advisor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-9 5-14 16-15-1 10-6 15-14 15z"/><path d="M4 20c4-5 8-9 12-12"/></svg>Field Advisor</a>
+    <a href="#breakeven" data-v="breakeven"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 17c4 0 5-9 14-11"/></svg>Break-even Lab</a>
+    <a href="#regency" data-v="regency"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/></svg>Regency Impact</a>
+    <a href="#monitor" data-v="monitor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Monitor</a>
+    <a href="#method" data-v="method"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 11h6M9 15h6"/></svg>Method &amp; Sources</a>
+  </nav>
+  <div class="right" aria-live="off">
+    <div class="pill"><span id="cdate"></span></div>
+    <div class="pill"><b id="ctime"></b></div>
+    <div class="pill"><span class="st"></span>Prototype v3 · Indramayu case</div>
+  </div>
+</header>
+
+<main>
+<section class="view" id="v-advisor">
+  <div class="pagehead">
+    <h1>Field Advisor</h1>
+    <p class="sub">Calculate field-level savings and coating requirements.</p>
+    <details class="about"><summary>About this view</summary><p>How much HUSKLOOP should this field get? Enter the field and the farmer's usual urea habit. The advisor converts it into a coated-urea dose and checks whether the coating pays for itself.</p></details>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>Field Inputs</h2>
+      <div class="row2">
+        <label>Field Area (ha)<input type="number" id="a" value="1" min="0.1" step="0.1"></label>
+        <label>Usual Urea Rate (kg/ha)<input type="number" id="d" value="291" min="50" step="1"></label>
+      </div>
+      <div class="sec">Urea Price</div>
+      <div class="seg" id="pseg"><button data-p="1800" class="on">Subsidised Rp1,800</button><button data-p="4050">Non-subsidised ≈Rp4,050</button></div>
+      <div id="whobox"><div class="sec">Cost Responsibility</div>
+      <div class="seg" id="kseg"><button data-k="1" class="on">A · Farmer</button><button data-k="0">B · Within subsidy</button><button data-k="0.5">C · Shared 50:50</button></div></div>
+      <div class="sec">Dose and Coating</div>
+      <label class="f">Expected Dose Saving <output id="so"></output><input type="range" id="s" min="0" max="40" step="1" value="20"></label>
+      <label class="f">Coating Share <output id="wo"></output><input type="range" id="w" min="3" max="20" step="1" value="5"></label>
+      <label class="f">Soil pH <output id="pho"></output><input type="range" id="ph" min="4.5" max="8.5" step="0.1" value="6.8"></label>
+      <details><summary>Shell Cost Assumptions</summary>
+        <div class="row2" style="margin-top:8px">
+          <label>Biochar Rp/kg<input type="number" id="pb" value="4000" step="100"></label>
+          <label>Clay Rp/kg<input type="number" id="pc" value="1500" step="100"></label>
+          <label>Starch Rp/kg<input type="number" id="ps" value="16000" step="500"></label>
+          <label>Processing Rp/kg urea<input type="number" id="pp" value="150" step="10"></label>
+        </div>
+        <p class="note">Shell mix 20% biochar, 75% clay, 5% starch. Prices: husk charcoal Rp3,000–5,000/kg (Sutisna et al., 2021); tapioca Rp13,000–16,000/kg in West Java, Nov 2026 (Kontan). Clay and processing are team assumptions.</p>
+      </details>
+    </div>
+    <div>
+      <div class="verdict" id="verdict"><div id="vtag" style="font-size:12.5px;font-weight:700;opacity:.92;letter-spacing:.5px"></div><div class="big" id="vbig"></div><div id="vsub" style="font-size:13.5px;margin-top:6px;opacity:.95"></div></div>
+      <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <div class="kpi"><div class="l">HUSKLOOP to Apply</div><div class="v" id="k1"></div><div class="s" id="k1s"></div></div>
+        <div class="kpi g"><div class="l">Urea Saved</div><div class="v" id="k2"></div><div class="s" id="k2s"></div></div>
+        <div class="kpi g"><div class="l">Climate Gain</div><div class="v" id="k3"></div><div class="s">N₂O + urea CO₂ avoided</div></div>
+        <div class="kpi g" id="k4box"><div class="l">State Subsidy Saved</div><div class="v" id="k4"></div><div class="s" id="k4s"></div></div>
+      </div>
+      <div class="card">
+        <h2>Cost per Season</h2>
+        <table class="tbl"><thead><tr><th>Item</th><th class="n">Prilled urea</th><th class="n">HUSKLOOP</th></tr></thead><tbody id="ctab"></tbody></table>
+        <div class="tip" id="phtip"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-breakeven">
+  <div class="pagehead">
+    <h1>Break-even Analysis</h1>
+    <p class="sub">Explore coating costs, savings, and economic feasibility.</p>
+    <details class="about"><summary>About this view</summary><p>The coating pays when its cost stays under the break-even line. Break-even coating cost: c<sub>max</sub> = P × s / (1 − s). It does not depend on hectares or dose, so one curve serves every field. Inputs follow the Field Advisor tab.</p></details>
+  </div>
+  <span class="tag">Coating Pays at Break-even</span>
+  <div class="grid">
+    <div class="card"><h2>Break-even Curve</h2><div class="fig" id="befig" style="min-height:330px"></div>
+      <div class="legend"><span><i class="ln" style="background:var(--husk)"></i>Break-even cost</span><span><i class="dsh"></i>Coating cost</span><span><i class="dt"></i>Current scenario</span></div>
+      <p class="note">Brown: break-even at the chosen urea price. Dashed: estimated coating cost at the chosen coating share. Dot: the current scenario.</p></div>
+    <div class="card"><h2>Savings Sensitivity</h2><div class="fig" id="tor" style="min-height:330px"></div>
+      <div class="legend"><span><i style="background:var(--husk)"></i>−25%</span><span><i style="background:var(--leaf)"></i>+25%</span></div>
+      <p class="note">Net saving per ha when each input moves ±25% from the current scenario, others fixed.</p></div>
+  </div>
+</section>
+
+<section class="view" id="v-regency">
+  <div class="pagehead">
+    <h1>Regency Impact</h1>
+    <p class="sub">Project annual savings and material requirements at regional scale.</p>
+    <details class="about"><summary>About this view</summary><p>Baseline is Indramayu's subsidised urea allocation (70,488 t, 2023). Change it to test another regency, or apply a national adoption share.</p></details>
+  </div>
+  <span class="tag" id="rg-title">Indramayu-wide adoption</span>
+  <div class="grid">
+    <div class="card">
+      <h2>Regency Inputs</h2>
+      <div class="seg" id="rseg"><button data-u="70488" data-h="77102" class="on">Indramayu</button><button data-u="4423023" data-h="0">National (urea quota 2026)</button></div>
+      <div class="row2">
+        <label>Baseline Urea (t/yr)<input type="number" id="u0" value="70488" step="100"></label>
+        <label>Mobilisable Husk (t/yr)<input type="number" id="hm" value="77102" step="100"></label>
+      </div>
+      <label class="f">Adoption Share <output id="ado"></output><input type="range" id="ad" min="5" max="100" step="5" value="100"></label>
+      <label class="f" style="margin-top:4px"><span><input type="checkbox" id="cru"> Add slower-release N₂O cut (−25% per kg N, Lü et al., 2023)</span></label>
+      <p class="note">Dose saving, coating share, prices and pH follow the Field Advisor tab.</p>
+    </div>
+    <div>
+      <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))">
+        <div class="kpi g"><div class="l">Urea Saved</div><div class="v" id="r1"></div><div class="s" id="r1s"></div></div>
+        <div class="kpi g"><div class="l">Subsidy Freed</div><div class="v" id="r2"></div><div class="s">ha of subsidised quota at the usual dose</div></div>
+        <div class="kpi g"><div class="l">Climate Gain</div><div class="v" id="r3"></div><div class="s" id="r3s"></div></div>
+        <div class="kpi"><div class="l">Value of Urea Saved</div><div class="v" id="r4"></div><div class="s" id="r4s"></div></div>
+      </div>
+      <div class="card"><h2>Annual Material Needs</h2>
+        <div id="mat"></div>
+        <div class="tip" id="husktip"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-monitor">
+  <div class="pagehead">
+    <h1>Performance Monitor</h1>
+    <p class="sub">Track monthly progress and cumulative fertilizer savings.</p>
+    <details class="about"><summary>About this view</summary><p>Monitoring the pilot month by month. Each row is one site and one month: hectares that finished fertilising with HUSKLOOP, their usual urea dose and the urea actually applied. The charts turn the log into month-to-month and year-to-year change.</p></details>
+  </div>
+  <div class="headline" id="mo-title"></div>
+  <div class="src"><span class="dot" id="mdot"></span><span id="msrc">Connecting to the shared log…</span>
+    <div class="seg" id="mseg"><button data-m="live">Logged data</button><button data-m="demo" class="on">Demo</button></div></div>
+  <div class="kpis">
+    <div class="kpi g"><div class="l" id="m1l">Urea saved, latest month</div><div class="v" id="m1"></div><div class="s" id="m1s"></div></div>
+    <div class="kpi g"><div class="l" id="m2l">Urea saved, year to date</div><div class="v" id="m2"></div><div class="s" id="m2s"></div></div>
+    <div class="kpi"><div class="l">Average Dose Saving</div><div class="v" id="m3"></div><div class="s" id="m3s"></div></div>
+    <div class="kpi g"><div class="l">Climate Gain, YTD</div><div class="v" id="m4"></div><div class="s">t CO₂e, N₂O + urea CO₂</div></div>
+    <div class="kpi g"><div class="l">Subsidy Freed, YTD</div><div class="v" id="m5"></div><div class="s">ha of subsidised quota at each site's usual dose</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h2>Monthly Urea Savings (t)</h2><div class="fig" id="momfig"></div>
+      <div class="legend" id="momleg"></div>
+      <p class="note">Gaps are months with no fertilising: Indramayu applies urea mainly in the wet season (Nov–Feb) and the dry season (Apr–Jul).</p></div>
+    <div class="card"><h2>Cumulative Urea Savings (t)</h2><div class="fig" id="yoyfig"></div>
+      <div class="legend" id="yoyleg"></div>
+      <p class="note">Each line adds up the year's saving month by month, so two years can be compared at the same point in the calendar.</p></div>
+  </div>
+  <div class="g2" style="margin-top:14px">
+    <div class="card"><h2>Yearly Totals and Target</h2><div class="scroll"><table class="tbl"><thead><tr><th>Year</th><th class="n">Hectares</th><th class="n">Urea saved</th><th class="n">Saving</th><th class="n">t CO₂e</th><th class="n">vs last year</th></tr></thead><tbody id="ytab"></tbody></table></div>
+      <label style="display:block;margin-top:12px">Target urea saved this year (t)<input type="number" id="tgt" value="80" min="1" step="1"></label>
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-top:10px"><span id="tgtl"></span><b id="tgtv"></b></div><div class="bar g"><i id="tgtb" style="width:0"></i></div></div>
+    <div class="card"><h2>Rain Check</h2>
+      <div class="seg" id="wseg"><button data-w="manual" class="on">Manual</button><button data-w="live">Live forecast</button></div>
+      <div id="wlive" hidden style="margin:6px 0 4px">
+        <div class="row2"><label>Location<select id="wloc"><option value="ind">Indramayu (default)</option><option value="me">My location</option></select></label>
+        <div style="align-self:end"><button class="btn" id="wgo" type="button" style="width:100%">Fetch forecast</button></div></div>
+        <div id="wdays"></div>
+      </div>
+      <p class="note" id="wst" style="margin:6px 0 8px"></p>
+      <div class="row2"><label>Forecast rain, next 24 h (mm)<input type="number" id="rain" value="12" min="0" step="1"></label>
+      <label>Rain, next 3 days (mm)<input type="number" id="rain72" value="" min="0" step="1" placeholder="optional"></label></div>
+      <label style="display:block;margin-top:10px">Field Water Condition<select id="flood"><option value="sat">Saturated, no standing water</option><option value="fl">Standing water</option><option value="dry">Dry or drained</option></select></label>
+      <div class="tip" id="raintip"></div>
+      <p class="note">The advice uses the next 24 h; the 3-day total is for planning only. Read the forecast for your village on <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca" style="color:var(--husk)">bmkg.go.id</a> and type it here, or fetch a model forecast when this page runs outside the sandbox. Daily rain classes follow BMKG: light 5–20 mm, moderate 20–50 mm, heavy 50–100 mm, very heavy above 100 mm.</p></div>
+  </div>
+  <div class="card" style="margin-top:14px"><h2>Add Field Entry</h2>
+    <form class="form" id="mform">
+      <label>Month<input type="month" id="fmo" required></label>
+      <label>Site (village or kecamatan)<input type="text" id="fsite" required maxlength="40" placeholder="Lohbener"></label>
+      <label>Hectares<input type="number" id="fha" required min="0.1" step="0.1"></label>
+      <label>Usual urea (kg/ha)<input type="number" id="fdose" required value="291" min="50" step="1"></label>
+      <label>Urea applied as HUSKLOOP (kg)<input type="number" id="fapp" required min="0" step="1"></label>
+      <button class="btn" type="submit">Add to log</button>
+    </form>
+    <p class="note" id="fmsg"></p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px"><button class="btn ghost" id="csv" type="button">Download CSV</button><button class="btn ghost" id="ccsv" type="button">Copy CSV</button><span class="note" id="csvmsg" style="align-self:center;margin:0"></span></div>
+    <div class="scroll" style="max-height:340px;overflow-y:auto"><table class="tbl"><thead><tr><th>Month</th><th>Site</th><th class="n">ha</th><th class="n">Usual kg/ha</th><th class="n">Applied kg</th><th class="n">Saved kg</th><th class="n">Saving</th><th></th></tr></thead><tbody id="ltab"></tbody></table></div>
+  </div>
+</section>
+
+<section class="view" id="v-method">
+  <div class="pagehead">
+    <h1>Method &amp; Sources</h1>
+    <p class="sub">Explore calculation methods, model parameters, and references.</p>
+    <details class="about"><summary>About this view</summary><p>Every figure in this prototype comes from the parameters below. Values marked "team" are assumptions to be replaced by trial data.</p></details>
+  </div>
+  <div class="gm">
+    <div class="card"><h2>Formulas</h2>
+      <table class="tbl"><tbody>
+      <tr><td>Break-even coating cost</td><td>c<sub>max</sub> = P·s/(1−s)</td></tr>
+      <tr><td>Coating per kg urea</td><td>m = w/(1−w)</td></tr>
+      <tr><td>Coating cost</td><td>c = m·(0.20·P<sub>b</sub>+0.75·P<sub>c</sub>+0.05·P<sub>s</sub>) + processing</td></tr>
+      <tr><td>N₂O avoided</td><td>ΔU·0.46·EF·(44/28)·273</td></tr>
+      <tr><td>Urea CO₂ avoided</td><td>ΔU·0.20·(44/12)</td></tr>
+      <tr><td>Husk needed</td><td>U(1−s)·m·0.20 / 0.35</td></tr>
+      </tbody></table></div>
+    <div class="card"><h2>Parameters and Sources</h2><div class="scroll">
+      <table class="tbl"><thead><tr><th>Parameter</th><th class="n">Value</th><th>Source</th></tr></thead><tbody>
+      <tr><td>Urea retail ceiling price (HET)</td><td class="n">Rp1,800/kg</td><td>Katadata, 22 Oct 2025</td></tr>
+      <tr><td>Non-subsidised urea</td><td class="n">≈Rp4,050/kg</td><td>HET Rp2,250 + gap Rp1,700–1,900 (Sumedi et al., 2025)</td></tr>
+      <tr><td>Urea use, irrigated lowland</td><td class="n">291 kg/ha</td><td>Sumedi et al. (2025), farm panel</td></tr>
+      <tr><td>Indramayu urea allocation</td><td class="n">70,488 t</td><td>Republika (2023), Pupuk Indonesia</td></tr>
+      <tr><td>National urea quota 2026</td><td class="n">4,423,023 t</td><td>Fortune IDN (2025), Kepmentan 1360/2025</td></tr>
+      <tr><td>Mobilisable husk, Indramayu</td><td class="n">77,102 t/yr</td><td>Swastika et al. (2024)</td></tr>
+      <tr><td>Dose saving s</td><td class="n">20% (10–30%)</td><td>Jia et al. (2021); Jiang et al. (2022)</td></tr>
+      <tr><td>EF, flooded rice</td><td class="n">0.004 kg N₂O-N/kg N</td><td>IPCC (2019), range 0.003–0.005</td></tr>
+      <tr><td>GWP₁₀₀ of N₂O</td><td class="n">273</td><td>Forster et al. (2021)</td></tr>
+      <tr><td>Biochar yield from husk</td><td class="n">≈35%</td><td>derived from Ariningsih et al. (2024)</td></tr>
+      <tr><td>Shell recipe 20:75:5</td><td class="n">biochar:clay:starch</td><td>after Petrus et al. (2020); team</td></tr>
+      </tbody></table></div></div>
+  </div>
+</section>
+</main>
+<footer>HUSKLOOP·DOSE is a student prototype for the OAASC 2026 essay. Dose saving and coating cost are planning assumptions, not trial results; field validation comes first. Live rain data, when fetched, comes from Open-Meteo (model forecast).</footer>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const fmt=(x,d=0)=>x.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+const rp=x=>(x<0?'−':'')+'Rp'+fmt(Math.abs(x));
+const big=x=>Math.abs(x)>=1e12?fmt(x/1e12,2)+' T':Math.abs(x)>=1e9?fmt(x/1e9,1)+' bn':Math.abs(x)>=1e6?fmt(x/1e6,1)+' M':fmt(x);
+const st={P:1800,k:1};const GAP=2250;
+const EF=0.004,GWP=273,NC=0.46,UCO2=0.2*44/12;
+function get(){return{A:+$('a').value||0,D:+$('d').value||0,P:st.P,s:+$('s').value/100,w:+$('w').value/100,ph:+$('ph').value,
+ pb:+$('pb').value,pc:+$('pc').value,ps:+$('ps').value,pp:+$('pp').value,u0:+$('u0').value||0,hm:+$('hm').value||0,ad:+$('ad').value/100,cru:$('cru').checked}}
+function coat(v,w=v.w){const m=w/(1-w);return{m,c:m*(0.2*v.pb+0.75*v.pc+0.05*v.ps)+v.pp}}
+function net(v){const {c}=coat(v);return v.D*v.P-v.D*(1-v.s)*(v.P+c)}
+function co2(dU,rem,cru){let t=dU*NC*EF*44/28*GWP+dU*UCO2;if(cru)t+=rem*NC*EF*44/28*GWP*0.25;return t}
+function render(){
+ const v=get();$('so').textContent=Math.round(v.s*100)+'%';$('wo').textContent=Math.round(v.w*100)+'%';$('pho').textContent=v.ph.toFixed(1);$('ado').textContent=Math.round(v.ad*100)+'%';
+ const {m,c}=coat(v);const cmax=v.P*v.s/(1-v.s);
+ const urea=v.A*v.D*(1-v.s),prod=urea/(1-v.w),saved=v.A*v.D*v.s;
+ const sub=v.P===1800,k=sub?st.k:1,cf=k*c;
+ const conv=v.A*v.D*v.P,hl=urea*(v.P+cf),n=conv-hl;
+ $('whobox').style.display=sub?'':'none';$('k4box').style.display=sub?'':'none';
+ const stSave=v.A*v.D*GAP-urea*(GAP+(1-k)*c);
+ $('k4').textContent=rp(stSave);$('k4s').textContent='gap ≈Rp2,250/kg avoided'+(k<1?', minus shell share':'');
+ const vd=$('verdict');const margin=k===0?1e9:cmax-cf;
+ vd.className='verdict '+(margin>25?'good':margin>-25?'edge':'bad');
+ $('vtag').textContent=margin>25?'COATING PAYS':margin>-25?'ROUGHLY BREAK-EVEN':'COATING DOES NOT PAY YET';
+ $('vbig').textContent=(n>=0?'Saves ':'Costs ')+rp(Math.abs(n))+' this season';
+ $('vsub').textContent=k===1?`Coating costs ${rp(c)} per kg urea; break-even is ${rp(cmax)} at ${Math.round(v.s*100)}% saving.`:`Farmer pays ${rp(cf)} of the ${rp(c)} shell cost per kg urea; ${k===0?'the subsidy carries the shell (scheme B, a policy option to be tested)':'the rest is carried by the subsidy (scheme C)'}.`;
+ $('k1').textContent=fmt(prod)+' kg';$('k1s').textContent=fmt(Math.ceil(prod/25))+' bags of 25 kg';
+ $('k2').textContent=fmt(saved)+' kg';$('k2s').textContent=fmt(v.s*100)+'% of usual urea';
+ $('k3').textContent=fmt(co2(saved,urea,false))+' kg CO₂e';
+ $('ctab').innerHTML=[['Urea bought (kg)',fmt(v.A*v.D),fmt(urea)],['Urea cost',rp(conv),rp(urea*v.P)],[k===1?'Coating cost':'Coating cost paid by farmer','—',rp(urea*cf)],['Total',rp(conv),rp(hl)]]
+  .map((r,i)=>`<tr${i==3?' style="font-weight:800"':''}><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td></tr>`).join('');
+ let t;if(v.ph>=6.5&&v.ph<=7.5)t='<b>pH in the best band.</b> Controlled-release urea cut NH₃ by 47.9% and N₂O by 23.7% in soils of pH 6.5–7.5 (Lü et al., 2023).';
+ else if(v.ph>7.5)t='<b>Alkaline soil.</b> The cut was smaller above pH 7.5 (NH₃ −29.3%, N₂O −17.3%). Use a lower saving, about 10–15%.';
+ else t='<b>Acid soil.</b> The meta-analysis gives no clear figure below pH 6.5. Keep the saving at 10% until local trials confirm it.';
+ $('phtip').innerHTML=t+' Biochar can raise NH₃ near the granule (Jia et al., 2021), so work it into the soil rather than broadcasting on flood water.';
+ drawBE(v,c,cmax);drawTor(v);
+ const U=v.u0*v.ad,dU=U*v.s,rem=U*(1-v.s);
+ $('r1').textContent=fmt(dU)+' t';$('r1s').textContent=`of ${fmt(U)} t urea per year`;
+ $('r2').textContent=fmt(dU*1000/(v.D||291));
+ const g=co2(dU,rem,v.cru);$('r3').textContent=fmt(g)+' t';$('r3s').textContent='CO₂e per year'+(v.cru?', incl. slower-release cut':'');
+ $('r4').textContent=rp(dU*1000*v.P).replace(/Rp([\d,]+)/,(a,b)=>'Rp'+big(+b.replace(/,/g,'')));$('r4s').textContent='at '+rp(v.P)+'/kg; at ≈Rp4,050: Rp'+big(dU*1000*4050);
+ const bc=rem*m*0.2,husk=bc/0.35,clay=rem*m*0.75,starch=rem*m*0.05;
+ const rows=[['Husk',husk],['Biochar',bc],['Clay',clay],['Starch',starch]];const mx=Math.max(...rows.map(r=>r[1]),1);
+ $('mat').innerHTML=rows.map(r=>`<div style="display:flex;justify-content:space-between;font-size:13.5px"><span>${r[0]}</span><b>${fmt(r[1])} t</b></div><div class="bar${r[0]=='Husk'?'':' g'}"><i style="width:${r[1]/mx*100}%"></i></div>`).join('');
+ if(typeof renderMon==='function'&&document.getElementById('v-monitor').classList.contains('on'))renderMon();
+ $('husktip').innerHTML=v.hm>0?`<b>${fmt(husk/v.hm*100,1)}% of mobilisable husk.</b> Indramayu's ${fmt(v.hm)} t/yr of mobilisable husk (Swastika et al., 2024) covers the coating hub; bricks and tiles keep the rest.`:'<b>No husk supply entered.</b> Add the mobilisable husk for this area to check supply.';
+}
+function drawBE(v,c,cmax){const s=$('befig');const W=s.clientWidth,H=s.clientHeight;if(!W)return;
+ const L=48,R=14,T=14,B=36,xs=x=>L+x/0.4*(W-L-R),ymax=Math.max(2000,c*1.3),ys=y=>H-B-Math.min(y,ymax)/ymax*(H-T-B);
+ let p='';for(let i=0;i<=40;i++){const x=i/100;p+=(i?'L':'M')+xs(x).toFixed(1)+' '+ys(v.P*x/(1-x)).toFixed(1)}
+ const area=p+`L${xs(0.4).toFixed(1)} ${ys(0)}L${xs(0)} ${ys(0)}Z`;
+ let g='';for(let y=0;y<=ymax;y+=500)g+=`<line x1="${L}" x2="${W-R}" y1="${ys(y)}" y2="${ys(y)}" stroke="var(--line)" stroke-dasharray="2 4"/><text x="${L-8}" y="${ys(y)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${W<520?y/1000+'k':fmt(y)}</text>`;
+ for(let x=0;x<=40;x+=10)g+=`<text x="${xs(x/100)}" y="${H-B+18}" text-anchor="middle" font-size="11" fill="var(--mut)">${x}%</text>`;
+ const ok=cmax>=c,dc=ok?'var(--leaf)':'var(--bad)';
+ s.innerHTML=`<svg viewBox="0 0 ${W} ${H}"><defs><linearGradient id="bef" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--husk)" stop-opacity=".22"/><stop offset="1" stop-color="var(--husk)" stop-opacity=".02"/></linearGradient></defs>${g}
+ <path d="${area}" fill="url(#bef)"/><path d="${p}" fill="none" stroke="var(--husk)" stroke-width="3" stroke-linecap="round"/>
+ <line x1="${L}" x2="${W-R}" y1="${ys(c)}" y2="${ys(c)}" stroke="var(--deep)" stroke-dasharray="6 5" stroke-width="1.6"/>
+ <text x="${W-R}" y="${ys(c)-7}" text-anchor="end" font-size="12" fill="var(--ink)">coating cost ${rp(c)}</text>
+ <line x1="${xs(v.s)}" x2="${xs(v.s)}" y1="${ys(cmax)}" y2="${ys(0)}" stroke="${dc}" stroke-dasharray="3 4" opacity=".6"/>
+ <circle cx="${xs(v.s)}" cy="${ys(cmax)}" r="7" fill="${dc}" stroke="var(--cardsolid)" stroke-width="2.5"/>
+ <text x="${xs(v.s)+11}" y="${ys(cmax)+17}" font-size="12" font-weight="700" fill="var(--ink)">${rp(cmax)}</text>
+ <text x="${(L+W-R)/2}" y="${H-3}" text-anchor="middle" font-size="11" fill="var(--mut)">urea dose saving, s</text></svg>`}
+function drawTor(v){const s=$('tor');const W=s.clientWidth,H=s.clientHeight;if(!W)return;
+ const base=net(v);const keys=[['s','Dose saving'],['P','Urea price'],['w','Coating share'],['pb','Biochar price'],['pc','Clay price'],['ps','Starch price'],['pp','Processing']];
+ const rows=keys.map(([k,l])=>{const lo={...v},hi={...v};lo[k]*=0.75;hi[k]*=1.25;return{l,a:net(lo)-base,b:net(hi)-base}}).sort((x,y)=>Math.max(Math.abs(y.a),Math.abs(y.b))-Math.max(Math.abs(x.a),Math.abs(x.b)));
+ const mx=Math.max(...rows.map(r=>Math.max(Math.abs(r.a),Math.abs(r.b))),1);const L=W<520?92:118,R=12,cx=L+(W-L-R)/2,hh=(H-40)/rows.length;
+ const sx=x=>x/mx*(W-L-R)/2;let g=`<line x1="${cx}" x2="${cx}" y1="8" y2="${H-26}" stroke="var(--line2)"/>`;
+ rows.forEach((r,i)=>{const y=10+i*hh;for(const [d,col] of [[r.a,'var(--husk)'],[r.b,'var(--leaf)']]){const x0=Math.min(cx,cx+sx(d));g+=`<rect x="${x0}" y="${y+3}" width="${Math.abs(sx(d))}" height="${hh-8}" rx="5" fill="${col}"/>`}
+  g+=`<text x="${L-8}" y="${y+hh/2+3}" text-anchor="end" font-size="12" fill="var(--ink)">${r.l}</text>`});
+ g+=`<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mut)">change in net saving per ha around ${rp(base)} (brown −25%, green +25%)</text>`;
+ s.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`}
+/* ---------- Monitor ---------- */
+const FU=NC*EF*44/28*GWP+UCO2; /* kg CO2e avoided per kg urea not applied */
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mlab=k=>MN[+k.slice(5)-1]+' '+k.slice(0,4);
+const SA=typeof claude==='undefined';
+const ms={mode:'demo',chosen:false,live:[],session:[],db:null,canW:null,dl:null,ok:false};
+const DEMO=(()=>{let r=7;const rnd=()=>(r=(r*16807)%2147483647)/2147483647;
+ const sites=[['Lohbener',300],['Sliyeg',285],['Gabuswetan',291]];
+ const seasons=[[2027,[4,5,6,7],[90,70,50],14],[2027,[11,12],[140,110,80],17],[2028,[1,2],[140,110,80],17],[2028,[4,5,6,7],[170,130,100],19],[2028,[11,12],[220,170,130],20]];
+ const wt={1:.35,2:.15,4:.15,5:.35,6:.35,7:.15,11:.15,12:.35},out=[];
+ seasons.forEach(([y,mos,has,sv])=>mos.forEach(m=>sites.forEach(([n,d],i)=>{const ha=Math.round(has[i]*wt[m]*(0.9+rnd()*0.2)*10)/10;
+  const s=(sv+(rnd()*3-1.5))/100;out.push({id:'d'+out.length,mo:y+'-'+String(m).padStart(2,'0'),site:n,ha,dose:d,app:Math.round(ha*d*(1-s)),demo:1})})));
+ return out})();
+function rowsNow(){return ms.mode==='demo'?DEMO:[...ms.live,...ms.session]}
+function calc(r){const us=r.ha*r.dose,sv=us-r.app;return{us,sv,pct:us?sv/us:0}}
+function agg(rows){const by={};rows.forEach(r=>{const k=r.mo,c=calc(r);const a=by[k]||(by[k]={us:0,sv:0,ha:0,fr:0});a.us+=c.us;a.sv+=c.sv;a.ha+=r.ha;a.fr+=c.sv/r.dose});return by}
+function monthsBetween(a,b){const o=[];let y=+a.slice(0,4),m=+a.slice(5);const Y=+b.slice(0,4),M=+b.slice(5);while(y<Y||(y===Y&&m<=M)){o.push(y+'-'+String(m).padStart(2,'0'));if(++m>12){m=1;y++}}return o}
+const pc=(a,b)=>b>0?(a-b)/b:null;
+const chg=(x,txt)=>x==null?txt||'':`<span class="chg ${x>=0?'up':'dn'}">${x>=0?'▲ +':'▼ −'}${fmt(Math.abs(x)*100,0)}%</span> ${txt||''}`;
+const YC=['var(--husk)','var(--sec)','var(--sage)','var(--line2)'];
+const yc=(i,n)=>YC[Math.min(n-1-i,YC.length-1)];
+const nice=(mx,n=4)=>{const r=mx/n,p=10**Math.floor(Math.log10(r)),st=[1,2,2.5,5,10].map(k=>k*p).find(k=>k>=r);return{st,top:Math.ceil(mx/st)*st}};
+function renderMon(){
+ const live=ms.live.length+ms.session.length;
+ $('mdot').className='dot'+(ms.mode==='live'&&ms.db?' live':'');$('mdot').hidden=ms.mode==='demo';
+ $('msrc').innerHTML=ms.mode==='demo'?'<span class="demo">DEMO</span> Simulated pilot, Apr 2027 – Dec 2028, three Indramayu sites. Illustrative only, not field records.'
+  :ms.db?`<b>Shared log, live.</b> ${live} entr${live==1?'y':'ies'}; new entries from any team member appear here within seconds.`
+  :SA?`<b>Local log.</b> Entries are kept in this page for this visit only. ${ms.session.length} entr${ms.session.length==1?'y':'ies'} so far; use Download CSV to keep them.`:`<b>Offline log.</b> The shared log is unavailable in this view (sign in to claude.ai with access). ${ms.session.length} entr${ms.session.length==1?'y':'ies'} kept for this visit only.`;
+ document.querySelectorAll('#mseg button').forEach(b=>b.classList.toggle('on',b.dataset.m===ms.mode));
+ const rows=rowsNow().slice().sort((a,b)=>a.mo<b.mo?-1:a.mo>b.mo?1:a.site.localeCompare(b.site));
+ $('ltab').innerHTML=rows.length?rows.slice().reverse().map(r=>{const c=calc(r);return`<tr><td>${mlab(r.mo)}</td><td>${esc(r.site)}</td><td class="n">${fmt(r.ha,1)}</td><td class="n">${fmt(r.dose)}</td><td class="n">${fmt(r.app)}</td><td class="n">${fmt(c.sv)}</td><td class="n"${c.pct<0.14?' style="color:#a12a22;font-weight:800" title="Below the 14% break-even of a 5% shell at the HET"':''}>${fmt(c.pct*100,1)}%${c.pct<0.14?' ⚠':''}</td><td>${r.demo?'':`<button class="x" data-del="${esc(r.id)}" aria-label="Delete entry">Delete</button>`}</td></tr>`}).join('')
+  :'<tr><td colspan="8" style="color:var(--mut)">No entries yet. Add the first month above, or switch to Demo to see how the charts read.</td></tr>';
+ const by=agg(rows),keys=Object.keys(by).sort();
+ if(!keys.length){['m1','m2','m3','m4','m5'].forEach(k=>$(k).textContent='—');['m1s','m2s','m3s'].forEach(k=>$(k).textContent='');$('mo-title').textContent='No pilot data logged yet';$('ytab').innerHTML='';$('momfig').innerHTML='';$('yoyfig').innerHTML='';$('momleg').innerHTML=$('yoyleg').innerHTML='';tgt(0,null);return}
+ const last=keys[keys.length-1],prev=keys[keys.length-2],Y=+last.slice(0,4);
+ $('m1l').textContent='Urea saved, '+mlab(last);$('m1').textContent=fmt(by[last].sv/1000,1)+' t';
+ $('m1s').innerHTML=prev?chg(pc(by[last].sv,by[prev].sv),'vs '+mlab(prev)):'first logged month';
+ const ytd=(y,upto)=>keys.filter(k=>+k.slice(0,4)===y&&k.slice(5)<=upto).reduce((a,k)=>({us:a.us+by[k].us,sv:a.sv+by[k].sv,fr:a.fr+by[k].fr}),{us:0,sv:0,fr:0});
+ const cur=ytd(Y,last.slice(5)),py=ytd(Y-1,last.slice(5));
+ $('m2l').textContent=`Urea saved, Jan–${MN[+last.slice(5)-1]} ${Y}`;$('m2').textContent=fmt(cur.sv/1000,1)+' t';
+ $('m2s').innerHTML=py.sv>0?chg(pc(cur.sv,py.sv),`vs same months of ${Y-1}`):'no earlier year to compare';
+ $('m3').textContent=fmt(cur.us?cur.sv/cur.us*100:0,1)+'%';const low=rows.filter(r=>calc(r).pct<0.14).length;$('m3s').innerHTML='of usual urea, '+Y+' to date; the essay plans 20%'+(low?`<br><b style="color:#a12a22">⚠ ${low} entr${low==1?'y':'ies'} below the 14% break-even (5% shell)</b>`:'');
+ $('m4').textContent=fmt(cur.sv*FU/1000,1);$('m5').textContent=fmt(cur.fr);
+ $('mo-title').textContent=py.sv>0?`Urea saved in ${Y} so far is ${fmt(Math.abs(pc(cur.sv,py.sv))*100)}% ${cur.sv>=py.sv?'above':'below'} the same months of ${Y-1}`:`${fmt(cur.sv/1000,1)} t of urea saved in ${Y} so far`;
+ const yrs=[...new Set(keys.map(k=>+k.slice(0,4)))];
+ $('ytab').innerHTML=yrs.map((y,i)=>{const t=keys.filter(k=>+k.slice(0,4)===y).reduce((a,k)=>({ha:a.ha+by[k].ha,us:a.us+by[k].us,sv:a.sv+by[k].sv}),{ha:0,us:0,sv:0});const p=i?yrs[i-1]:null;
+  const tp=p?keys.filter(k=>+k.slice(0,4)===p).reduce((a,k)=>a+by[k].sv,0):0;
+  return`<tr><td><b>${y}</b>${y===Y?' <span class="note">to '+MN[+last.slice(5)-1]+'</span>':''}</td><td class="n">${fmt(t.ha)}</td><td class="n">${fmt(t.sv/1000,1)} t</td><td class="n">${fmt(t.us?t.sv/t.us*100:0,1)}%</td><td class="n">${fmt(t.sv*FU/1000,1)}</td><td class="n">${p&&tp>0?chg(pc(t.sv,tp)):'—'}</td></tr>`}).join('');
+ tgt(cur.sv/1000,Y);
+ drawMoM(by,monthsBetween(keys[0],last),yrs);drawYoY(by,yrs,last);
+}
+function tgt(v,Y){const T=+$('tgt').value||0;$('tgtl').textContent=Y?`${Y}: ${fmt(v,1)} of ${fmt(T)} t`:'';$('tgtv').textContent=T&&Y?fmt(v/T*100)+'%':'';$('tgtb').style.width=Math.min(100,T?v/T*100:0)+'%'}
+function drawMoM(by,mos,yrs){const s=$('momfig');const W=s.clientWidth,H=s.clientHeight;if(!W)return;
+ const L=40,R=8,T=16,B=30,n=mos.length,bw=(W-L-R)/n,mx=Math.max(...mos.map(k=>by[k]?by[k].sv:0),1)/1000,{st,top}=nice(mx),ys=y=>H-B-y/top*(H-T-B);
+ let g='';for(let y=0;y<=top+1e-9;y+=st){g+=`<line x1="${L}" x2="${W-R}" y1="${ys(y)}" y2="${ys(y)}" stroke="var(--line)"/><text x="${L-6}" y="${ys(y)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${fmt(y,st<1?1:0)}</text>`}
+ const every=W<520?(n>12?6:3):(n>18?3:1);
+ mos.forEach((k,i)=>{const v=by[k]?by[k].sv/1000:0,x=L+i*bw,col=yc(yrs.indexOf(+k.slice(0,4)),yrs.length);
+  if(v>0)g+=`<rect x="${x+bw*0.14}" y="${ys(v)}" width="${bw*0.72}" height="${ys(0)-ys(v)}" rx="2" fill="${col}"><title>${mlab(k)}: ${fmt(v,2)} t</title></rect>`;
+  if(i%every===0||i===n-1)g+=`<text x="${x+bw/2}" y="${H-B+16}" text-anchor="middle" font-size="11" fill="var(--mut)">${MN[+k.slice(5)-1].slice(0,W<520?1:3)}${k.endsWith('-01')||i===0?' '+k.slice(2,4):''}</text>`});
+ const lk=mos[n-1],lv=by[lk]?by[lk].sv/1000:0;if(lv>0)g+=`<text x="${Math.min(L+(n-0.5)*bw,W-R-2)}" y="${ys(lv)-5}" text-anchor="end" font-size="12" font-weight="700" fill="var(--ink)">${fmt(lv,1)} t</text>`;
+ s.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+ $('momleg').innerHTML=yrs.map((y,i)=>`<span><i style="background:${yc(i,yrs.length)}"></i>${y}</span>`).join('')}
+function drawYoY(by,yrs,last){const s=$('yoyfig');const W=s.clientWidth,H=s.clientHeight;if(!W)return;
+ const L=40,R=W<520?70:92,T=14,B=30,xs=m=>L+m/11*(W-L-R);
+ const lines=yrs.map(y=>{let c=0;const pts=[];for(let m=1;m<=12;m++){const k=y+'-'+String(m).padStart(2,'0');if(k>last)break;c+=by[k]?by[k].sv/1000:0;pts.push([m-1,c])}return{y,pts,end:c}});
+ const mx=Math.max(...lines.map(l=>l.end),1),{st,top}=nice(mx),ys=v=>H-B-v/top*(H-T-B);
+ let g='';for(let v=0;v<=top+1e-9;v+=st){g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${L-6}" y="${ys(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${fmt(v)}</text>`}
+ for(let m=0;m<12;m+=W<520?3:1)g+=`<text x="${xs(m)}" y="${H-B+16}" text-anchor="middle" font-size="11" fill="var(--mut)">${MN[m].slice(0,W<520?3:1)}</text>`;
+ const ends=[];lines.forEach((l,i)=>{const col=yc(i,yrs.length);const d=l.pts.map((p,j)=>(j?'L':'M')+xs(p[0]).toFixed(1)+' '+ys(p[1]).toFixed(1)).join('');
+  g+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${i===lines.length-1?3:2}"/>`;const p=l.pts[l.pts.length-1];if(p){g+=`<circle cx="${xs(p[0])}" cy="${ys(p[1])}" r="4" fill="${col}"/>`;ends.push({x:xs(p[0]),y:ys(p[1]),t:`${l.y}: ${fmt(l.end,1)}`,col})}});
+ ends.sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<14)ends[i].y=ends[i-1].y+14;
+ ends.forEach(e=>{const right=e.x>W-R-4;g+=`<text x="${right?e.x+7:e.x+7}" y="${e.y+4}" font-size="12" font-weight="700" fill="var(--ink)">${e.t}</text>`});
+ s.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+ $('yoyleg').innerHTML=lines.map((l,i)=>`<span><i style="background:${yc(i,yrs.length)}"></i>${l.y}${l.pts.length<12?' (to '+MN[l.pts.length-1]+')':''}</span>`).join('')}
+function rainTip(){const r=+$('rain').value||0,f=$('flood').value;let t;
+ if(r>=50)t='<b>Postpone.</b> Heavy rain is forecast. Water spilling over the bunds can carry urea off the field; apply once the rain has passed.';
+ else if(r>=20)t='<b>Apply only if the granules can be worked into the mud today</b> and the bunds and outlets are closed. Otherwise wait a day.';
+ else t='<b>Good window.</b> Light or no rain is forecast.';
+ t+=f==='fl'?' Standing water: granules broadcast onto flood water lose more NH₃. Lower the water to saturated soil, apply and work in, then re-flood.':f==='dry'?' Dry soil: urea left on the surface loses NH₃. Irrigate or work it in soon after applying.':' Saturated soil without standing water is the easiest condition to work the granules in.';
+ $('raintip').innerHTML=t}
+function toCSV(){const rows=rowsNow();const h='month,site,hectares,usual_urea_kg_per_ha,urea_applied_kg,urea_saved_kg,saving_pct,co2e_avoided_kg,source';
+ return [h,...rows.map(r=>{const c=calc(r);return[r.mo,'"'+String(r.site).replace(/"/g,'""')+'"',r.ha,r.dose,r.app,Math.round(c.sv),(c.pct*100).toFixed(1),Math.round(c.sv*FU),r.demo?'demo':'log'].join(',')})].join('\n')}
+$('mseg').onclick=e=>{const b=e.target.closest('button');if(!b)return;ms.mode=b.dataset.m;ms.chosen=true;renderMon()};
+$('tgt').addEventListener('input',renderMon);$('rain').addEventListener('input',rainTip);$('flood').addEventListener('change',rainTip);
+{const d=new Date();$('fmo').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+$('mform').addEventListener('submit',async e=>{e.preventDefault();
+ const r={mo:$('fmo').value,site:$('fsite').value.trim().slice(0,40),ha:+$('fha').value,dose:+$('fdose').value,app:+$('fapp').value};
+ if(!/^\d{4}-\d{2}$/.test(r.mo)||!r.site||!(r.ha>0)||!(r.dose>0)||!(r.app>=0)){$('fmsg').textContent='Fill every field with a valid value.';return}
+ if(r.app>r.ha*r.dose*1.5){$('fmsg').textContent='Applied urea is more than 1.5 × the usual amount; check the units (kg, not t).';return}
+ ms.mode='live';ms.chosen=true;
+ if(ms.db&&ms.canW!==false){try{await ms.db.collection('logs').add({...r,ts:Date.now()});$('fmsg').textContent='Saved to the shared log.';$('fha').value='';$('fapp').value='';return}
+  catch(err){if(err&&err.code==='invalid_argument')ms.canW=false;$('fmsg').textContent=err&&err.code==='quota_exceeded'?'The shared log is full; export it as CSV and delete old rows.':'Could not save to the shared log; kept for this visit only.'}}
+ else $('fmsg').textContent='Kept for this visit only. Sign in with edit access to save to the shared log.';
+ ms.session.push({...r,id:'s'+Date.now()});$('fha').value='';$('fapp').value='';renderMon()});
+$('ltab').onclick=async e=>{const b=e.target.closest('[data-del]');if(!b)return;const id=b.dataset.del;
+ if(id[0]==='s'&&ms.session.some(x=>x.id===id)){ms.session=ms.session.filter(x=>x.id!==id);renderMon();return}
+ if(ms.db)try{await ms.db.collection('logs').doc(id).delete()}catch(err){$('fmsg').textContent='Could not delete this entry.'}};
+$('ccsv').onclick=async()=>{try{await navigator.clipboard.writeText(toCSV());$('csvmsg').textContent='CSV copied.'}catch(e){$('csvmsg').textContent='Copy was blocked by the browser.'}};
+$('csv').onclick=async()=>{if(!ms.dl){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([toCSV()],{type:'text/csv'}));a.download=`huskloop-log-${ms.mode}.csv`;document.body.appendChild(a);a.click();a.remove();$('csvmsg').textContent='';}catch(e){$('csvmsg').textContent='Download is not available here; use Copy CSV.'}return}
+ try{await ms.dl.save({filename:`huskloop-log-${ms.mode}.csv`,data:toCSV()});$('csvmsg').textContent=''}catch(e){$('csvmsg').textContent='Download cancelled.'}};
+(async()=>{try{ms.dl=await claude.use('downloads')}catch(e){}
+ let db=null;try{db=await claude.use('db')}catch(e){}
+ if(!db){renderMon();return}ms.db=db;
+ try{const u=await claude.use('user');if(u&&u.can){const c=await u.can('data.write');if(c===false)ms.canW=false}}catch(e){}
+ const tm=setTimeout(()=>{$('msrc').innerHTML+=' <b>The shared log cannot be reached yet.</b>'},10000);
+ db.collection('logs').onSnapshot(snap=>{if(!snap.metadata.fromCache)clearTimeout(tm);
+  ms.live=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,mo:String(x.mo||''),site:String(x.site||'?'),ha:+x.ha||0,dose:+x.dose||291,app:+x.app||0}}).filter(r=>/^\d{4}-\d{2}$/.test(r.mo)&&r.ha>0);
+  if(!ms.chosen&&ms.live.length)ms.mode='live';renderMon()},err=>{clearTimeout(tm);ms.db=null;renderMon()});
+ renderMon()})();
+rainTip();
+/* ---------- Weather strip: manual entry always works; live fetch is optional ---------- */
+const WX={mode:'manual',lat:-6.3264,lon:108.3200,name:'Indramayu'};
+function wxMode(m){WX.mode=m;document.querySelectorAll('#wseg button').forEach(b=>b.classList.toggle('on',b.dataset.w===m));$('wlive').hidden=m!=='live';
+ $('wst').textContent=m==='live'?'Press Fetch forecast. Values fill the boxes below and stay editable.':'Type the forecast for your village. Source: your own reading, for example bmkg.go.id.'}
+async function wxFetch(){const st=$('wst');st.textContent='Fetching…';
+ try{
+  if($('wloc').value==='me'){await new Promise((ok,no)=>{if(!navigator.geolocation)return no(new Error('geo'));navigator.geolocation.getCurrentPosition(p=>{WX.lat=p.coords.latitude;WX.lon=p.coords.longitude;WX.name='your location';ok()},no,{timeout:8000})})}
+  else{WX.lat=-6.3264;WX.lon=108.3200;WX.name='Indramayu'}
+  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat.toFixed(4)}&longitude=${WX.lon.toFixed(4)}&hourly=precipitation&forecast_days=4&timezone=Asia%2FJakarta`);
+  if(!r.ok)throw new Error('http '+r.status);
+  const j=await r.json();const T=j.hourly&&j.hourly.time,P=j.hourly&&j.hourly.precipitation;if(!T||!P)throw new Error('shape');
+  const now=new Date().toLocaleString('sv-SE',{timeZone:'Asia/Jakarta'}).replace(' ','T').slice(0,13)+':00';
+  let i0=T.findIndex(t=>t>=now);if(i0<0)i0=0;
+  const sum=(a,b)=>P.slice(a,b).reduce((x,y)=>x+(+y||0),0);
+  const r24=sum(i0,i0+24),r72=sum(i0,i0+72);
+  const d=[0,1,2].map(k=>sum(i0+k*24,i0+k*24+24));
+  $('rain').value=Math.round(r24);$('rain72').value=Math.round(r72);
+  $('wdays').innerHTML=d.map((x,k)=>`<span class="chip">${['Next 24 h','24–48 h','48–72 h'][k]}: <b>${fmt(x,0)} mm</b></span>`).join('');
+  rainTip();
+  const hhmm=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Jakarta',hour12:false,hour:'2-digit',minute:'2-digit'});
+  st.innerHTML=`<b>Live:</b> Open-Meteo model forecast for ${WX.name}, fetched ${hhmm} WIB. A model estimate, not a BMKG warning.`;
+ }catch(e){wxMode('manual');$('wst').textContent=(e&&e.message==='geo')||(e&&e.code)?'Location was not shared. Type the forecast instead, or choose Indramayu.':'Live forecast is not available in this view. Open the standalone page, or type the forecast.'}}
+document.querySelectorAll('#wseg button').forEach(b=>b.onclick=()=>wxMode(b.dataset.w));
+$('wgo').onclick=wxFetch;wxMode('manual');
+
+document.querySelectorAll('#pseg button').forEach(b=>b.onclick=()=>{st.P=+b.dataset.p;document.querySelectorAll('#pseg button').forEach(x=>x.classList.toggle('on',x===b));render()});
+document.querySelectorAll('#kseg button').forEach(b=>b.onclick=()=>{st.k=+b.dataset.k;document.querySelectorAll('#kseg button').forEach(x=>x.classList.toggle('on',x===b));render()});
+document.querySelectorAll('#rseg button').forEach(b=>b.onclick=()=>{$('u0').value=b.dataset.u;$('hm').value=b.dataset.h;$('ad').value=b.dataset.u>1e6?10:100;$('rg-title').textContent=b.dataset.u>1e6?'National roll-out on the subsidised urea quota':'Indramayu-wide adoption';document.querySelectorAll('#rseg button').forEach(x=>x.classList.toggle('on',x===b));render()});
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
+function route(){const h=(location.hash||'#advisor').slice(1);const ok=['advisor','breakeven','regency','monitor','method'].includes(h)?h:'advisor';
+ document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+ok));document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===ok));render()}
+window.addEventListener('hashchange',route);
+const ro=new ResizeObserver(()=>render());ro.observe(document.querySelector('main'));
+route();
+}
+
+function tick(){const d=new Date(),o={timeZone:'Asia/Jakarta'};
+ document.getElementById('cdate').textContent=d.toLocaleDateString('en-GB',{...o,weekday:'long',day:'numeric',month:'short',year:'numeric'});
+ document.getElementById('ctime').textContent=d.toLocaleTimeString('en-GB',{...o,hour12:false})+' WIB'}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
